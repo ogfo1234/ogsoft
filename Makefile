@@ -69,9 +69,6 @@ sh: ## Log into the main application container
 	@$(ECHO) $(OSECHOFLAG) "\n\n$(FORMAT_YELLOW)Logging into node container$(FORMAT_RESET)\n"
 	docker-compose exec app sh
 
-init:
-	@$(ECHO) $(OSECHOFLAG) "\n\n$(FORMAT_YELLOW)Installing dependencies$(FORMAT_RESET)\n"
-
 test: ## Install dependencies
 	@$(ECHO) $(OSECHOFLAG) "\n\n$(FORMAT_YELLOW)Preparing database$(FORMAT_RESET)\n"
 	docker-compose exec -T app sh -c "php artisan test"
