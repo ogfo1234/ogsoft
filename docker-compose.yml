@@ -1,0 +1,59 @@
+version: "3"
+services:
+    # api srouce
+    app:
+        image: thecodingmachine/php:8.1-v4-apache
+        container_name: ogsoft-api
+        restart: unless-stopped
+        environment:
+            APACHE_DOCUMENT_ROOT: /var/www/html/public
+            STARTUP_COMMAND_1: composer install
+        volumes:
+            - ./:/var/www/html:delegated
+            - ./vendor/:/var/www/html/vendor
+        ports:
+            - 8080:80
+        networks:
+            - ogsoft_api
+    db:
+        image: mariadb:10.5
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ogsoft
+            MYSQL_DATABASE: ogsoft
+            MYSQL_USER: ogsoft
+            MYSQL_PASSWORD: ogsoft
+        volumes:
+            - ./tmp/mariadb:/var/www/html
+        networks:
+            - ogsoft_api
+    mailhog:
+        image: mailhog/mailhog:v1.0.0
+        ports:
+            - 9925:1025
+            - 9926:8025
+        external_links:
+            - mailhog
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+        networks:
+            - ogsoft_api
+    redis:
+        image: redis:alpine
+        restart: always
+        ports:
+            - 6379:6379
+        networks:
+            - ogsoft_api
+        command: redis-server --requirepass ${REDIS_PASSWORD}
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 9988:8080
+        networks:
+            - ogsoft_api
+
+networks:
+    ogsoft_api:
+        driver: bridge
