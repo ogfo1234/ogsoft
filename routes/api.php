@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\SimpleEndpointController;
+use App\Http\Controllers\Api\WorkingDaysController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,5 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'api', 'prefix' => 'v1'], function () {
     Route::get('/simple-endpoint', [SimpleEndpointController::class, 'get'])->name('simple-endpoint.get');
     Route::post('/simple-endpoint', [SimpleEndpointController::class, 'post'])->name('simple-endpoint.post');
+    Route::get('/working-day', [WorkingDaysController::class, 'index'])->name('working-days.index');
 });

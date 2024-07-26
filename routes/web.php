@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\Date;
 use Illuminate\Support\Facades\Route;
 
 /*

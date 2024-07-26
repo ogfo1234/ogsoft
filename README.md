@@ -24,3 +24,16 @@ SELECT o.*, u.username AS "Meno zákaznika"
 FROM orders AS o
 JOIN users AS u ON u.id = o.id_user
 ```
+
+## Onboarding General 1
+I created one enpoint based on General1.pdf
+
+This endpoint is located on the path `/api/v1/working-day` and accept two parameters, one is requred (date) and second is optional (country). It returns a JSON object like this:
+
+```json
+{
+    "is_working_day": false,
+    "is_weekend":true,
+    "is_holiday":false
+}
+```
