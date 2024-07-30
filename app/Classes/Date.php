@@ -5,6 +5,7 @@ namespace App\Classes;
 use DateTime;
 use App\Models\Holiday;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class Date extends DateTime
 {
@@ -41,14 +42,22 @@ class Date extends DateTime
      */
     public function isHoliday(Collection $holidayCountries = null): bool
     {
-        $baseQuery = Holiday::where('date', $this->format('Y-m-d'));
+        $key = 'holiday_' . $this->format('Y-m-d');
 
-        // check if $cc is provided
         if ($holidayCountries) {
-            $baseQuery->whereIn('country', $holidayCountries->toArray());
+            $key .= '_' . $holidayCountries->implode('_');
         }
 
-        return $baseQuery->exists();
+        return Cache::remember($key, 60 * 60 * 24, function () use ($holidayCountries) {
+            $baseQuery = Holiday::where('date', $this->format('Y-m-d'));
+
+            // check if $cc is provided
+            if ($holidayCountries) {
+                $baseQuery->whereIn('country', $holidayCountries->toArray());
+            }
+
+            return $baseQuery->exists();
+        });
     }
 
     /**
